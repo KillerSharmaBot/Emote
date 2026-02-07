@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emote Library</title>
+<style>
+:root {
+  --primary: #6c5ce7;
+  --primary-dark: #5649c0;
+  --primary-light: #a29bfe;
+  --primary-glow: rgba(108, 92, 231, 0.4);
+  --bg-dark: #0a0a0a;
+  --bg-dark-secondary: #111111;
+  --bg-card: #1a1a1a;
+  --bg-card-hover: #252525;
+  --text-light: #f5f5f5;
+  --text-muted: #aaaaaa;
+  --text-muted-light: #888888;
+  --accent: #e84393;
+  --accent-light: #fd79a8;
+  --success: #00b894;
+  --warning: #fdcb6e;
+  --error: #e74c3c;
+  --border-radius: 16px;
+  --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --transition-smooth: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.6);
+  --glow: 0 0 30px var(--primary-glow);
+  --glass-bg: rgba(26, 26, 26, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  margin: 0;
+  overflow-x: hidden;
+  min-height: 100vh;
+  transition: var(--transition-smooth);
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(108, 92, 231, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(232, 67, 147, 0.08) 0%, transparent 50%);
+  z-index: -2;
+  animation: backgroundFloat 30s ease-in-out infinite alternate;
+}
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(45deg, transparent 0%, rgba(108, 92, 231, 0.02) 50%, transparent 100%);
+  z-index: -1;
+  animation: gradientShift 20s linear infinite;
+}
+@keyframes backgroundFloat {
+  0%, 100% { 
+    transform: translate(0, 0) scale(1); 
+  }
+  33% { 
+    transform: translate(-1%, 1.5%) scale(1.01); 
+  }
+  66% { 
+    transform: translate(1.5%, -1%) scale(0.99); 
+  }
+}
+@keyframes gradientShift {
+  0% { 
+    transform: translateX(0) translateY(0); 
+  }
+  100% { 
+    transform: translateX(100%) translateY(100%); 
+  }
+}
+header {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow);
+  border-bottom: 1px solid var(--glass-border);
+  transition: var(--transition-smooth);
+  animation: slideDown 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+header h1 {
+  font-size: 24px;
+  margin: 0;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+  position: relative;
+  padding-left: 4px;
+}
+header h1::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 4px;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 2px;
+  opacity: 0.8;
+}
+.dropdown {
+  position: relative;
+}
+.dropdown button {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.3px;
+}
+.dropdown button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: 0.6s;
+}
+.dropdown button:hover::before {
+  left: 100%;
+}
+.dropdown button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover), var(--glow);
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 10px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  min-width: 160px;
+  max-height: 350px;
+  overflow-y: auto;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-hover);
+  animation: dropdownFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid var(--glass-border);
+  z-index: 1001;
+}
+.dropdown-content::-webkit-scrollbar {
+  width: 6px;
+}
+.dropdown-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 3px;
+}
+.dropdown-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--primary), var(--accent));
+  border-radius: 3px;
+}
+@keyframes dropdownFade {
+  from { 
+    opacity: 0; 
+    transform: translateY(-12px) scale(0.98); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+.dropdown-content button {
+  background: transparent;
+  color: var(--text-light);
+  border: none;
+  padding: 14px 20px;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 0;
+  box-shadow: none;
+  font-weight: 500;
+  justify-content: flex-start;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+.dropdown-content button::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: width 0.3s ease;
+}
+.dropdown-content button:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  padding-left: 24px;
+  transform: none;
+}
+.dropdown-content button:hover::after {
+  width: 100%;
+}
+.container {
+  padding: 32px;
+  max-width: 1600px;
+  margin: 0 auto;
+  animation: fadeIn 0.8s ease-out 0.2s both;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.filters {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 36px;
+  position: relative;
+  animation: slideUp 0.8s ease-out 0.4s both;
+}
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(36px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.filters input {
+  width: 90%;
+  max-width: 600px;
+  padding: 18px 24px;
+  padding-right: 60px;
+  border-radius: var(--border-radius);
+  border: 2px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  color: var(--text-light);
+  outline: none;
+  font-size: 16px;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow);
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+.filters input:focus {
+  border-color: var(--primary);
+  box-shadow: var(--glow), var(--shadow);
+  transform: translateY(-2px);
+  background: var(--bg-card);
+}
+.filters::after {
+  content: '⌕';
+  position: absolute;
+  right: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+  font-size: 20px;
+  font-weight: 300;
+  opacity: 0.7;
+  transition: var(--transition-smooth);
+}
+.filters input:focus + .filters::after {
+  color: var(--primary);
+  opacity: 1;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px;
+  max-height: calc(100vh - 280px);
+  overflow-y: auto;
+  padding: 16px 8px 32px 0;
+  animation: gridAppear 1s ease-out 0.6s both;
+}
+@keyframes gridAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.grid::-webkit-scrollbar {
+  width: 10px;
+}
+.grid::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+}
+.grid::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--primary), var(--accent));
+  border-radius: 10px;
+  transition: var(--transition-smooth);
+}
+.grid::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--primary-dark), var(--accent));
+}
+.card {
+  background: var(--bg-card);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+  cursor: pointer;
+  animation: cardAppear 0.5s ease-out both;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--glass-border);
+  opacity: 0;
+  transform: translateY(20px);
+}
+@keyframes cardAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent 30%, rgba(108, 92, 231, 0.05) 100%);
+  opacity: 0;
+  transition: var(--transition-smooth);
+}
+.card:hover::before {
+  opacity: 1;
+}
+.card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: var(--transition-smooth);
+}
+.card:hover::after {
+  opacity: 0.3;
+}
+.card:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-hover), var(--glow);
+  border-color: rgba(108, 92, 231, 0.3);
+}
+.card img {
+  max-width: 90%;
+  max-height: 140px;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  transition: var(--transition-smooth);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  position: relative;
+  z-index: 1;
+}
+.card:hover img {
+  transform: scale(1.08) rotate(1deg);
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.6));
+}
+.tooltip {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  font-weight: 600;
+  text-align: center;
+  word-break: break-all;
+  position: relative;
+  z-index: 1;
+  transition: var(--transition-smooth);
+  letter-spacing: 0.3px;
+}
+.card:hover .tooltip {
+  color: var(--primary-light);
+  transform: translateY(2px);
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  gap: 8px;
+  animation: fadeIn 0.8s ease-out 0.8s both;
+}
+.pagination button {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  color: var(--text-light);
+  border: none;
+  padding: 12px 20px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  font-weight: 600;
+  min-width: 48px;
+  height: 48px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+}
+.pagination button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  opacity: 0;
+  transition: var(--transition-smooth);
+}
+.pagination button.active {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  box-shadow: var(--glow), var(--shadow);
+  transform: scale(1.05);
+  border-color: transparent;
+}
+.pagination button.active::before {
+  opacity: 1;
+}
+.pagination button:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: var(--shadow-hover);
+}
+.pagination button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none !important;
+  background: var(--glass-bg);
+}
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.92);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(12px);
+  animation: modalFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  padding: 20px;
+}
+@keyframes modalFadeIn {
+  from { 
+    opacity: 0; 
+    backdrop-filter: blur(0px);
+  }
+  to { 
+    opacity: 1; 
+    backdrop-filter: blur(12px);
+  }
+}
+.modal-content {
+  background: var(--bg-card);
+  padding: 40px;
+  border-radius: var(--border-radius);
+  max-width: 550px;
+  width: 95%;
+  text-align: center;
+  position: relative;
+  box-shadow: var(--shadow-hover), 0 0 60px rgba(108, 92, 231, 0.2);
+  border: 1px solid var(--glass-border);
+  animation: modalSlideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+  transform-origin: center;
+}
+@keyframes modalSlideIn {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.8) translateY(40px) rotateX(-10deg); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: scale(1) translateY(0) rotateX(0); 
+  }
+}
+.modal-content img {
+  max-width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  border-radius: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  animation: imageFloat 4s ease-in-out infinite;
+  border: 3px solid rgba(108, 92, 231, 0.3);
+}
+@keyframes imageFloat {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  25% { transform: translateY(-10px) rotate(0.5deg); }
+  50% { transform: translateY(-5px) rotate(-0.5deg); }
+  75% { transform: translateY(-8px) rotate(0.3deg); }
+}
+.close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  z-index: 2001;
+}
+.close:hover {
+  background: rgba(231, 76, 60, 0.8);
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
+}
+#modalName {
+  font-size: 32px;
+  margin: 0 0 12px;
+  color: var(--text-light);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+#modalId {
+  font-size: 18px;
+  margin: 0 0 30px;
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50px;
+  display: inline-block;
+  transition: var(--transition-smooth);
+}
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  }
+}
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+  }
+  header {
+    padding: 16px 20px;
+  }
+  header h1 {
+    font-size: 24px;
+  }
+  .container {
+    padding: 24px;
+  }
+}
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+  header {
+    padding: 14px 16px;
+  }
+  header h1 {
+    font-size: 22px;
+  }
+  .container {
+    padding: 20px;
+  }
+  .modal-content {
+    padding: 30px 20px;
+    margin: 10px;
+  }
+  .modal-content img {
+    max-height: 220px;
+  }
+  .filters input {
+    padding: 16px 20px;
+    font-size: 15px;
+  }
+}
+@media (max-width: 576px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 14px;
+  }
+  .filters input {
+    padding: 14px 18px;
+    font-size: 14px;
+  }
+  .filters::after {
+    right: 8%;
+  }
+  .pagination button {
+    padding: 10px 14px;
+    min-width: 42px;
+    height: 42px;
+    font-size: 14px;
+  }
+  .modal-content {
+    padding: 24px 16px;
+  }
+  #modalName {
+    font-size: 26px;
+  }
+  #modalId {
+    font-size: 16px;
+  }
+  .card {
+    padding: 16px;
+  }
+  .card img {
+    max-height: 100px;
+  }
+}
+@media (max-width: 400px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 12px;
+  }
+  header h1 {
+    font-size: 20px;
+  }
+  .dropdown button {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+}
+::selection {
+  background: rgba(108, 92, 231, 0.3);
+  color: white;
+}
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <h1>Emote Library</h1>
+  </div>
+  <div class="header-right">
+    <div class="dropdown">
+      <button onclick="toggleDropdown()">
+        <span id="dropdownText">OB Update</span>
+        <span id="dropdownArrow">▼</span>
+      </button>
+      <div id="obDropdown" class="dropdown-content"></div>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <div class="filters">
+    <input type="text" id="searchBox" placeholder="Search by Name or ID (e.g. 909042007 or 'OB42')" autocomplete="off">
+  </div>
+  <div id="itemsGrid" class="grid">
+    <div class="loading">
+      <div class="spinner"></div>
+    </div>
+  </div>
+  <div class="pagination" id="pagination"></div>
+</div>
+<div id="itemModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <img id="modalIcon" src="" alt="Emote Preview">
+    <h2 id="modalName"></h2>
+    <p id="modalId"></p>
+  </div>
+</div>
+<script>
+const FALLBACK_IMG = "https://via.placeholder.com/100/333333/FFFFFF?text=No+Image";
+let allItems = [], selectedOB = "all", currentPage = 1, itemsPerPage = 30;
+let selectedEmote = null;
+
+async function fetchData() {
+  try {
+    const res = await fetch("https://raw.githubusercontent.com/KillerSharmaBot/Emote/main/itemData.json");
+    allItems = await res.json();
+    createOBDropdown();
+    renderItems();
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    document.getElementById("itemsGrid").innerHTML = `
+      <div class="empty-state">
+        <h3>Error Loading Data</h3>
+        <p>Unable to fetch emote data. Please check your connection.</p>
+      </div>
+    `;
+  }
+}
+
+function createOBDropdown() {
+  const dropdown = document.getElementById("obDropdown");
+  dropdown.innerHTML = "";
+  
+  const allBtn = document.createElement("button");
+  allBtn.innerHTML = "All Updates";
+  allBtn.onclick = () => selectOB("all");
+  dropdown.appendChild(allBtn);
+  
+  const obVersions = new Set();
+  allItems.forEach(item => {
+    if (item.Id && item.Id.toString().length >= 9) {
+      const obCode = item.Id.toString().substring(4, 6);
+      if (obCode >= "33" && obCode <= "52") {
+        obVersions.add(`OB${obCode}`);
+      }
+    }
+  });
+  
+  const sortedVersions = Array.from(obVersions).sort((a, b) => 
+    parseInt(b.substring(2)) - parseInt(a.substring(2))
+  );
+  
+  sortedVersions.forEach(code => {
+    const btn = document.createElement("button");
+    btn.innerHTML = code;
+    btn.onclick = () => selectOB(code);
+    dropdown.appendChild(btn);
+  });
+}
+
+function toggleDropdown() {
+  const d = document.getElementById("obDropdown");
+  const arrow = document.getElementById("dropdownArrow");
+  if (d.style.display === "block") {
+    d.style.display = "none";
+    arrow.style.transform = "rotate(0deg)";
+  } else {
+    d.style.display = "block";
+    arrow.style.transform = "rotate(180deg)";
+  }
+}
+
+window.onclick = e => {
+  if (!e.target.closest('.dropdown')) {
+    document.getElementById("obDropdown").style.display = "none";
+    document.getElementById("dropdownArrow").style.transform = "rotate(0deg)";
+  }
+}
+
+function selectOB(obCode) {
+  selectedOB = obCode;
+  const displayText = obCode === "all" ? "OB Update" : obCode;
+  document.getElementById("dropdownText").textContent = displayText;
+  currentPage = 1;
+  renderItems();
+  document.getElementById("obDropdown").style.display = "none";
+  document.getElementById("dropdownArrow").style.transform = "rotate(0deg)";
+}
+
+function detectOB(search) {
+  const match1 = search.match(/9090(\d{2})/);
+  const match2 = search.match(/OB(\d{2})/i);
+  if (match1) return "OB" + match1[1];
+  if (match2) return "OB" + match2[1];
+  return null;
+}
+
+function applyFilters() {
+  const search = document.getElementById("searchBox").value.toLowerCase().trim();
+  const detectedOB = detectOB(search);
+  const obCode = detectedOB || (selectedOB !== "all" ? selectedOB : null);
+  
+  return allItems.filter(item => {
+    const idStr = item.Id?.toString() || "";
+    const name = item.name?.toLowerCase() || "";
+    const matchesOB = obCode ? idStr.startsWith("9090" + obCode.replace("OB", "")) : true;
+    const matchesSearch = !search || name.includes(search) || idStr.includes(search);
+    return matchesOB && matchesSearch;
+  });
+}
+
+function renderItems() {
+  const filtered = applyFilters();
+  const grid = document.getElementById("itemsGrid");
+  
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <h3>No Emotes Found</h3>
+        <p>Try adjusting your search or filter criteria.</p>
+        <button class="submit-btn" style="margin-top: 20px; max-width: 200px;" onclick="clearSearch()">
+          Clear Search
+        </button>
+      </div>
+    `;
+    updatePagination(0);
+    return;
+  }
+  
+  grid.innerHTML = "";
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const items = filtered.slice(start, end);
+  
+  items.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.style.animationDelay = `${index * 0.05}s`;
+    div.style.animation = `cardAppear 0.5s ease-out ${index * 0.05}s both`;
+    
+    const imgUrl = `https://cdn.jsdelivr.net/gh/ShahGCreator/icon@main/PNG/${item.Id}.png`;
+    const fallbackImg = `${FALLBACK_IMG}`;
+    
+    div.innerHTML = `
+      <img 
+        src="${imgUrl}"
+        onerror="this.onerror=null; this.src='${fallbackImg}'"
+        alt="${item.name || 'Emote'}"
+        loading="lazy">
+      <div class='tooltip'>${item.Id}</div>
+    `;
+    
+    div.onclick = () => showDetails(item);
+    grid.appendChild(div);
+  });
+  
+  updatePagination(filtered.length);
+}
+
+function clearSearch() {
+  document.getElementById("searchBox").value = "";
+  selectedOB = "all";
+  document.getElementById("dropdownText").textContent = "OB Update";
+  currentPage = 1;
+  renderItems();
+}
+
+function updatePagination(totalItems) {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const pagDiv = document.getElementById("pagination");
+  
+  if (totalPages <= 1) {
+    pagDiv.innerHTML = "";
+    return;
+  }
+  
+  pagDiv.innerHTML = "";
+  
+  const prevBtn = document.createElement("button");
+  prevBtn.innerHTML = "◀";
+  prevBtn.title = "Previous page";
+  prevBtn.disabled = currentPage === 1;
+  prevBtn.onclick = () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderItems();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+  pagDiv.appendChild(prevBtn);
+  
+  const startPage = Math.max(1, currentPage - 2);
+  const endPage = Math.min(totalPages, startPage + 4);
+  
+  for (let i = startPage; i <= endPage; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = i;
+    btn.title = `Page ${i}`;
+    if (i === currentPage) btn.classList.add("active");
+    btn.onclick = () => {
+      currentPage = i;
+      renderItems();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    pagDiv.appendChild(btn);
+  }
+  
+  const nextBtn = document.createElement("button");
+  nextBtn.innerHTML = "▶";
+  nextBtn.title = "Next page";
+  nextBtn.disabled = currentPage === totalPages;
+  nextBtn.onclick = () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderItems();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+  pagDiv.appendChild(nextBtn);
+}
+
+function showDetails(item) {
+  selectedEmote = item;
+  const modalIcon = document.getElementById("modalIcon");
+  modalIcon.src = `https://raw.githubusercontent.com/KillerSharmaBot/Emote/main/emote_image/${item.Id}.png`;
+  modalIcon.onerror = function() {
+    this.src = FALLBACK_IMG;
+  };
+  
+  document.getElementById("modalName").textContent = item.name || "Unnamed Emote";
+  document.getElementById("modalId").textContent = "ID: " + item.Id;
+  document.getElementById("itemModal").style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+document.querySelector(".close").onclick = () => {
+  document.getElementById("itemModal").style.display = "none";
+  document.body.style.overflow = "auto";
+};
+
+window.onclick = e => {
+  if (e.target === document.getElementById("itemModal")) {
+    document.getElementById("itemModal").style.display = "none";
+    document.body.style.overflow = "auto";
+  }
+};
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.getElementById("itemModal").style.display = "none";
+    document.body.style.overflow = "auto";
+  }
+});
+
+let searchTimeout;
+document.getElementById("searchBox").addEventListener("input", () => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    currentPage = 1;
+    renderItems();
+  }, 300);
+});
+
+document.getElementById("searchBox").addEventListener("keypress", e => {
+  if (e.key === "Enter") {
+    currentPage = 1;
+    renderItems();
+  }
+});
+
+window.addEventListener('load', () => {
+  fetchData();
+  
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    const header = document.querySelector('header');
+    if (currentScroll > lastScroll && currentScroll > 100) {
+      header.style.transform = 'translateY(-100%)';
+    } else {
+      header.style.transform = 'translateY(0)';
+    }
+    lastScroll = currentScroll;
+  });
+});
+</script>
+</body>
+</html>
