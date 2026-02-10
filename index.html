@@ -979,7 +979,7 @@ function updatePagination(totalItems) {
 function showDetails(item) {
   selectedEmote = item;
   const modalIcon = document.getElementById("modalIcon");
-  modalIcon.src = `https://raw.githubusercontent.com/KillerSharmaBot/Emote/main/emote_image/${item.Id}.png`;
+  modalIcon.src = `https://raw.githubusercontent.com/KillerSharmaBot/Emote/refs/heads/main/emote_image/${item.Id}.png`;
   modalIcon.onerror = function() {
     this.src = FALLBACK_IMG;
   };
