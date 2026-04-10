@@ -797,7 +797,7 @@ function createOBDropdown() {
   allItems.forEach(item => {
     if (item.Id && item.Id.toString().length >= 9) {
       const obCode = item.Id.toString().substring(4, 6);
-      if (obCode >= "33" && obCode <= "52") {
+      if (obCode >= "33" && obCode <= "53") {
         obVersions.add(`OB${obCode}`);
       }
     }
