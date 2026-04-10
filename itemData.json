@@ -388,46 +388,6 @@
         "name": "Challenger"
     },
     {
-        "Id": 909000100,
-        "name": "Greeting"
-    },
-    {
-        "Id": 909000101,
-        "name": "Greeting"
-    },
-    {
-        "Id": 909000102,
-        "name": "Greeting"
-    },
-    {
-        "Id": 909000103,
-        "name": "Greeting"
-    },
-    {
-        "Id": 909000104,
-        "name": "Greeting"
-    },
-    {
-        "Id": 909000105,
-        "name": "Greeting"
-    },
-    {
-        "Id": 909000106,
-        "name": "Greeting"
-    },
-    {
-        "Id": 909000107,
-        "name": "Greeting"
-    },
-    {
-        "Id": 909000108,
-        "name": "Greeting"
-    },
-    {
-        "Id": 909000109,
-        "name": "Greeting"
-    },
-    {
         "Id": 909000121,
         "name": "Dribble King"
     },
@@ -1754,5 +1714,69 @@
     {
         "Id": 909052019,
         "name": "Raise Your Thumb!"
+    },
+    {
+        "Id": 909052021,
+        "name": "Husky Dance"
+    },
+    {
+        "Id": 909053001,
+        "name": "Victory Trumpet"
+    },
+    {
+        "Id": 909053002,
+        "name": "Eclipse Creation"
+    },
+    {
+        "Id": 909053003,
+        "name": "Power of Eclipse"
+    },
+    {
+        "Id": 909053004,
+        "name": "Undersea Wriggle"
+    },
+    {
+        "Id": 909053005,
+        "name": "Reverse Penalty!"
+    },
+    {
+        "Id": 909053006,
+        "name": "Winning Kick"
+    },
+    {
+        "Id": 909053007,
+        "name": "Keepie Uppie"
+    },
+    {
+        "Id": 909053008,
+        "name": "VAR Review"
+    },
+    {
+        "Id": 909053009,
+        "name": "Sweeten Up"
+    },
+    {
+        "Id": 909053010,
+        "name": "Sculpted Stills"
+    },
+    {
+        "Id": 909053011,
+        "name": "Multitasking"
+    },
+    {
+        "Id": 909053012,
+        "name": "Itchy Nose"
+    },
+    {
+        "Id": 909053013,
+        "name": "Reverse Penalty!"
+    },
+    {
+        "Id": 909053014,
+        "name": "Reverse Penalty!"
+    },
+    {
+        "Id": 909053015,
+        "name": "Reverse Penalty!"
     }
 ]
