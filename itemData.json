@@ -1778,5 +1778,77 @@
     {
         "Id": 909053015,
         "name": "Reverse Penalty!"
-    }
+    },
+  {
+    "Id": 909054001,
+    "name": "The Champion Is Here!"
+  },
+  {
+    "Id": 909054002,
+    "name": "Mark of Honor"
+  },
+  {
+    "Id": 909054003,
+    "name": "Left Right Sway"
+  },
+  {
+    "Id": 909054004,
+    "name": "Phoenix Flourish"
+  },
+  {
+    "Id": 909054005,
+    "name": "Anniversary Parade"
+  },
+  {
+    "Id": 909054006,
+    "name": "Celebration Dance"
+  },
+  {
+    "Id": 909054007,
+    "name": "Volcanic Fury"
+  },
+  {
+    "Id": 909054008,
+    "name": "Scarlet Finish"
+  },
+  {
+    "Id": 909054009,
+    "name": "Cotton All Over"
+  },
+  {
+    "Id": 909054010,
+    "name": "Keytar Jam"
+  },
+  {
+    "Id": 909054011,
+    "name": "kitten Accordion"
+  },
+  {
+    "Id": 909054012,
+    "name": "Smooth Jam"
+  },
+  {
+    "Id": 909054013,
+    "name": "Drum Jam"
+  },
+  {
+    "Id": 909054014,
+    "name": "Trophy Lift"
+  },
+  {
+    "Id": 909054015,
+    "name": "Baa Baa Knit"
+  },
+  {
+    "Id": 909054016,
+    "name": "Spotless"
+  },
+  {
+    "Id": 909054017,
+    "name": "Heart Swing"
+  },
+  {
+    "Id": 909054020,
+    "name": "Anniversary Parade"
+  }
 ]
